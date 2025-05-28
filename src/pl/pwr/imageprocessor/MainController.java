@@ -66,6 +66,8 @@ public class MainController {
 
                 Image image = SwingFXUtils.toFXImage(originalBuffered, null);
                 originalImageView.setImage(image);
+                processedBuffered = null;
+                saveButton.setDisable(true);
                 processedImageView.setImage(null);
 
                 showSuccess("Pomyślnie załadowano plik");
@@ -122,12 +124,11 @@ public class MainController {
 
     @FXML
     private void handleSaveImage() {
-        if (processedBuffered == null) {
-            showWarning("Na pliku nie zostały wykonane żadne operacje!");
+        if (processedBuffered == null || processedImageView.getImage() == null) {
+            showCustomOrangeWarning("Na pliku nie zostały wykonane żadne operacje!");
             return;
         }
 
-        // okno z polem do wpisania nazwy
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Zapisz obraz");
         dialog.setHeaderText("Podaj nazwę pliku (3–100 znaków):");
@@ -217,5 +218,14 @@ public class MainController {
         alert.showAndWait();
     }
 
+    private void showCustomOrangeWarning(String msg) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Ostrzeżenie");
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+
+        alert.getDialogPane().setStyle("-fx-background-color: orange;");
+        alert.showAndWait();
+    }
 
 }
